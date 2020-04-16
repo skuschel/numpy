@@ -21,7 +21,8 @@ from numpy.lib import (
     add_newdoc_ufunc, angle, average, bartlett, blackman, corrcoef, cov,
     delete, diff, digitize, extract, flipud, gradient, hamming, hanning,
     i0, insert, interp, kaiser, meshgrid, msort, piecewise, place, rot90,
-    select, setxor1d, sinc, trapz, trim_zeros, unwrap, unique, vectorize
+    select, setxor1d, sinc, trapz, trim_zeros, unwrap, unique, vectorize,
+    pcov
     )
 
 from numpy.compat import long

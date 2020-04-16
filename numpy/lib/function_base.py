@@ -57,7 +57,7 @@ __all__ = [
     'select', 'piecewise', 'trim_zeros', 'copy', 'iterable', 'percentile',
     'diff', 'gradient', 'angle', 'unwrap', 'sort_complex', 'disp', 'flip',
     'rot90', 'extract', 'place', 'vectorize', 'asarray_chkfinite', 'average',
-    'bincount', 'digitize', 'cov', 'corrcoef',
+    'bincount', 'digitize', 'cov', 'corrcoef', 'pcov',
     'msort', 'median', 'sinc', 'hamming', 'hanning', 'bartlett',
     'blackman', 'kaiser', 'trapz', 'i0', 'add_newdoc', 'add_docstring',
     'meshgrid', 'delete', 'insert', 'append', 'interp', 'add_newdoc_ufunc',
@@ -2447,6 +2447,19 @@ def cov(m, y=None, rowvar=True, bias=False, ddof=None, fweights=None,
     return c.squeeze()
 
 
+def pcov(x, y=None, rowvar=None, bias=None, ddof=None, fweights=None, aweights=None):
+    '''
+    Partial covariance
+    '''
+    if y is None:
+        y = np.mean(x, axis=0 if rowvar else 1)
+    y = atleast_2d(y)
+    c = cov(x, I, rowvar=rowvar, bias=bias, ddof=ddof, fweights=fweights, aweights=aweights)
+    cov = c[:-1, :-1]
+    ret = cov - outer(c[-1, :-1], c[:-1, -1]) / c[-1,-1]
+    return ret
+
+
 def _corrcoef_dispatcher(x, y=None, rowvar=None, bias=None, ddof=None):
     return (x, y)
 
@@ -3707,7 +3720,7 @@ def quantile(a, q, axis=None, out=None,
              overwrite_input=False, interpolation='linear', keepdims=False):
     """
     Compute the q-th quantile of the data along the specified axis.
-    
+
     .. versionadded:: 1.15.0
 
     Parameters
